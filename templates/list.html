@@ -7,11 +7,30 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+  <div class="list-container">
     <h1>Uploaded Videos</h1>
-    <ul>
-        {% for video in videos %}
-            <li><a href="{{ url_for('view_video', filename=video) }}">{{ video }}</a></li>
-        {% endfor %}
-    </ul>
+    <table class="video-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Tamaño</th>
+          <th>Duración</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for v in videos %}
+        <tr>
+          <td>{{ v.name }}</td>
+          <td>{{ v.size }}</td>
+          <td>{{ v.duration }}</td>
+          <td>
+            <a href="{{ url_for('view_video', filename=v.name) }}" class="btn-small">▶️ Ver</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
