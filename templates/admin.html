@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Administrativo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="admin-container">
+      <div class="admin-card">
+        <div class="admin-header">
+            <h1>Panel Administrativo</h1>
+            <a href="{{ url_for('upload_file') }}" class="btn btn-upload">Subir Video</a>
+        </div>
+        <!-- Búsqueda -->
+        <form method="get" action="{{ url_for('admin_panel') }}" class="search-form">
+            <input type="text" name="search" placeholder="Buscar..." value="{{ search }}">
+            <button type="submit" class="btn-small">🔍</button>
+        </form>
+
+        <!-- Tabla con iconos -->
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Video</th>
+                    <th>Renombrar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for v in videos %}
+                <tr>
+                    <td>{{ v }}</td>
+                    <td>
+                      <button class="btn-icon rename-btn" data-filename="{{ v }}" title="Renombrar">
+                        ✏️
+                      </button>
+                    </td>
+                    <td>
+                      <form action="{{ url_for('admin_delete') }}" method="post" class="inline-form">
+                        <input type="hidden" name="del_name" value="{{ v }}">
+                        <button type="submit" class="btn-icon btn-danger" title="Eliminar">
+                          🗑️
+                        </button>
+                      </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('admin_panel', page=page-1, search=search) }}" class="btn-small">&laquo; Prev</a>
+            {% endif %}
+            Página {{ page }} de {{ total_pages }}
+            {% if page < total_pages %}
+                <a href="{{ url_for('admin_panel', page=page+1, search=search) }}" class="btn-small">Next &raquo;</a>
+            {% endif %}
+        </div>
+
+        <p style="text-align:center; padding:16px;">
+          <a href="{{ url_for('list_videos') }}" class="btn">Volver al listado público</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal de renombrar -->
+    <div id="renameModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Renombrar Video</h2>
+        <form id="renameForm" action="{{ url_for('admin_rename') }}" method="post">
+          <input type="hidden" name="old_name" id="modalOldName">
+          <div class="form-group">
+            <label for="modalNewName">Nuevo nombre</label>
+            <input type="text" name="new_name" id="modalNewName" class="form-input" required>
+          </div>
+          <button type="submit" class="btn btn-small">Renombrar</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Modal logic
+      const modal = document.getElementById('renameModal');
+      const modalOld = document.getElementById('modalOldName');
+      const modalNew = document.getElementById('modalNewName');
+      document.querySelectorAll('.rename-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          modalOld.value = btn.dataset.filename;
+          modalNew.value = btn.dataset.filename;
+          modal.style.display = 'block';
+        });
+      });
+      document.querySelector('.modal .close').onclick = ()=> modal.style.display='none';
+      window.onclick = e=> { if(e.target==modal) modal.style.display='none'; }
+    </script>
+</body>
+</html>

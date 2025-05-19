@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reproduciendo {{ filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Reproduciendo: {{ filename }}</h1>
+    <div class="video-container">
+        <video controls>
+            <source
+                src="{{ url_for('uploaded_file', filename=filename) }}"
+                type="{{ 'video/mp4' if filename.rsplit('.',1)[1].lower()=='mp4' else 'video/x-matroska' }}">
+            Tu navegador no soporta reproducción de video.
+        </video>
+    </div>
+    <div class="button-container">
+        <a href="{{ url_for('list_videos') }}" class="btn">Volver al listado</a>
+    </div>
+</body>
+</html>

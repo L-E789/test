@@ -62,3 +62,320 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* Centrar video y estilizar */
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+.video-container video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.button-container {
+    text-align: center;
+    margin: 20px 0;
+}
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Login elegante */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #eef2f7;
+}
+.login-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    width: 320px;
+}
+.login-card h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+.btn-login {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    transition: background-color .3s;
+}
+.btn-login:hover {
+    background-color: #218838;
+}
+
+/* Admin panel table */
+.admin-table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+.admin-table th,
+.admin-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+.admin-table th {
+    background: #007bff;
+    color: #fff;
+}
+.inline-form {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.btn-small {
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+.btn-small:hover {
+    background: #0056b3;
+}
+.btn-danger {
+    background: #dc3545;
+}
+.btn-danger:hover {
+    background: #c82333;
+}
+
+/* Admin wrapper y tarjeta */
+.admin-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+.admin-card {
+    background: #fff;
+    width: 90%;
+    max-width: 900px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Cabecera dentro de la tarjeta */
+.admin-header {
+    background: #34495e;        /* azul oscuro elegante */
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-header h1 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+/* Botón subir */
+.btn-upload {
+    background: #e67e22;        /* naranja sofisticado */
+    padding: 8px 18px;
+    font-size: 0.9rem;
+}
+.btn-upload:hover {
+    background: #d35400;        /* naranja oscuro */
+}
+
+/* Formulario de búsqueda */
+.search-form {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    gap: 8px;
+}
+.search-form input {
+    width: 200px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-form button {
+    padding: 6px 12px;
+}
+
+/* Tabla elegante */
+.admin-table th {
+    background: #2c3e50;        /* azul muy oscuro */
+    color: #fff;
+    font-weight: 600;
+}
+.admin-table tr:nth-child(even) {
+    background: #ecf0f1;        /* gris claro */
+}
+.admin-table tr:hover {
+    background: #bdc3c7;        /* gris medio */
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    gap: 8px;
+}
+.pagination .btn-small {
+    background: #34495e;
+    color: #fff;
+    padding: 6px 12px;
+}
+.pagination .btn-small:hover {
+    background: #2c3e50;
+}
+
+/* Icon buttons */
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform .2s;
+}
+.btn-icon:hover { transform: scale(1.2); }
+.btn-danger { color: #c0392b; }
+.btn-danger:hover { color: #e74c3c; }
+
+/* Tabla elegante con separación */
+.admin-table {
+    width: 100%;
+    border-spacing: 0 8px;
+}
+.admin-table th, .admin-table td {
+    background: #fff;
+    padding: 12px 16px;
+}
+.admin-table th {
+    background: #2c3e50;
+    color: #fff;
+    text-align: left;
+}
+.admin-table tr td:first-child {
+    font-weight: 500;
+}
+.admin-table tr:hover td {
+    background: #ecf0f1;
+}
+
+/* Modal de renombrar */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 320px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    position: relative;
+}
+.modal-content h2 {
+    margin-top: 0;
+    color: #34495e;
+}
+.modal-content .close {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+.modal .form-group input {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Ajuste global de formularios en modal */
+.modal-content .btn-small {
+    width: 100%;
+    margin-top: 12px;
+}
+
+/* Lista de videos */
+.list-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.video-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.video-table th,
+.video-table td {
+    padding: 12px 16px;
+    text-align: left;
+}
+.video-table th {
+    background: #2c3e50;
+    color: #fff;
+    font-weight: 600;
+}
+.video-table tr:nth-child(even) {
+    background: #ecf0f1;
+}
+.video-table td a.btn-small {
+    background: #16a085;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+}
+.video-table td a.btn-small:hover {
+    background: #138d75;
+}
