@@ -9,28 +9,31 @@
 <body>
   <div class="list-container">
     <h1>Uploaded Videos</h1>
-    <table class="video-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Tamaño</th>
-          <th>Duración</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for v in videos %}
-        <tr>
-          <td>{{ v.name }}</td>
-          <td>{{ v.size }}</td>
-          <td>{{ v.duration }}</td>
-          <td>
-            <a href="{{ url_for('view_video', filename=v.name) }}" class="btn-small">▶️ Ver</a>
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table class="video-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Tamaño</th>
+            <th>Duración</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for v in videos %}
+          <tr>
+            <td data-label="Nombre">{{ v.name }}</td>
+            <td data-label="Tamaño">{{ v.size }}</td>
+            <td data-label="Duración">{{ v.duration }}</td>
+            <td data-label="Acción">
+              <a href="{{ url_for('view_video', filename=v.name) }}" class="btn-small">▶️ Ver</a>
+              <a href="{{ url_for('download_file', filename=v.name) }}" class="btn-small">⬇️ Descargar</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </body>
 </html>

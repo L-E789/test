@@ -1,7 +1,8 @@
 """Flask app para autenticación básica, subida, listado y reproducción de videos."""
 import os
 import mimetypes
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory, session
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory, session, jsonify
+from werkzeug.utils import secure_filename
 
 # intentar usar MoviePy para obtener duración
 try:
@@ -27,18 +28,35 @@ def allowed_file(filename):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    """Gestionar la subida de uno o varios videos vía GET y POST."""
-    if not session.get('logged_in'):               # proteger ruta
+    """Gestionar la subida de uno o varios videos vía GET y POST, con selección de carpeta."""
+    if not session.get('logged_in'):
         return redirect(url_for('login'))
     if request.method == 'POST':
+        folder = request.form.get('folder') or ''
+        target_dir = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(folder))
+        os.makedirs(target_dir, exist_ok=True)
         if 'file' not in request.files:
             return redirect(request.url)
         files = request.files.getlist('file')
         for file in files:
             if file and allowed_file(file.filename):
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(target_dir, filename))
         return redirect(url_for('list_videos'))
-    return render_template('upload.html')
+    # GET: list existing folders
+    dirs = [d for d in os.listdir(app.config['UPLOAD_FOLDER']) if os.path.isdir(os.path.join(app.config['UPLOAD_FOLDER'], d))]
+    return render_template('upload.html', dirs=dirs)
+
+@app.route('/create_folder', methods=['POST'])
+def create_folder():
+    """Crear una nueva carpeta dentro de uploads."""
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    name = secure_filename(request.form.get('new_folder', ''))
+    if name:
+        path = os.path.join(app.config['UPLOAD_FOLDER'], name)
+        os.makedirs(path, exist_ok=True)
+    return redirect(url_for('upload_file'))
 
 @app.route('/videos', methods=['GET'])
 def list_videos():
@@ -141,6 +159,43 @@ def admin_delete():
     if os.path.exists(path):
         os.remove(path)
     return redirect(url_for('admin_panel'))
+
+@app.route('/upload_chunk', methods=['POST'])
+def upload_chunk():
+    """Handle chunked video uploads into subfolders."""
+    if not session.get('logged_in'):
+        return jsonify({'error': 'unauthorized'}), 401
+    folder = request.form.get('folder') or ''
+    safe_folder = secure_filename(folder)
+    target_dir = os.path.join(app.config['UPLOAD_FOLDER'], safe_folder)
+    os.makedirs(target_dir, exist_ok=True)
+    file = request.files.get('chunk')
+    try:
+        chunk_index = int(request.form['chunkIndex'])
+        total_chunks = int(request.form['totalChunks'])
+    except (KeyError, ValueError):
+        return jsonify({'error': 'invalid chunk parameters'}), 400
+    filename = request.form.get('fileName')
+    if not file or not filename:
+        return jsonify({'error': 'bad request'}), 400
+    if not allowed_file(filename):
+        return jsonify({'error': 'file type not allowed'}), 400
+    temp_path = os.path.join(target_dir, filename + '.part')
+    with open(temp_path, 'ab') as f:
+        f.write(file.read())
+    # If last chunk, finalize file
+    if chunk_index == total_chunks - 1:
+        final_path = os.path.join(target_dir, filename)
+        os.rename(temp_path, final_path)
+    return jsonify({'chunkIndex': chunk_index})
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    """Descargar archivo de video existente."""
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    if os.path.exists(file_path):
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+    return redirect(url_for('list_videos'))
 
 @app.route('/', methods=['GET'])
 def home():
