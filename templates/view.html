@@ -2,21 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reproduciendo {{ filename }}</title>
+    <title>{{ video_name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
 </head>
 <body>
-    <h1>Reproduciendo: {{ filename }}</h1>
+<div class="view-page-container">
+    <h1>{{ video_name }}</h1>
     <div class="video-container">
-        <video controls>
-            <source
-                src="{{ url_for('uploaded_file', filename=filename) }}"
-                type="{{ 'video/mp4' if filename.rsplit('.',1)[1].lower()=='mp4' else 'video/x-matroska' }}">
-            Tu navegador no soporta reproducción de video.
+        <video controls autoplay>
+            <source src="{{ url_for('uploaded_file', filename=video_path) }}" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
     </div>
     <div class="button-container">
         <a href="{{ url_for('list_videos') }}" class="btn">Volver al listado</a>
+        <a href="{{ url_for('download_file', filename=video_path) }}" class="btn">Descargar Video</a>
     </div>
+</div>
 </body>
 </html>

@@ -5,16 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Video</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='upload.css') }}">
 </head>
 <body>
     <h1>Upload Video</h1>
     <form id="uploadForm" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+        <label for="folder">Carpeta destino:</label>
+        <select name="folder" id="folder">
+            <option value="">(Raíz)</option>
+            {% for d in dirs %}
+                <option value="{{ d }}">{{ d }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="new_folder" id="new_folder" placeholder="Nueva carpeta (opcional)">
+        <button type="button" onclick="crearCarpeta()">Crear carpeta</button>
+        <br><br>
         <label for="file">Choose video files:</label>
-        <input type="file" id="file" name="file" accept=".mp4, .mkv" multiple required>
+        <input type="file" id="file" name="file" accept=".mp4, .mkv" multiple required class="form-input-file">
         <button type="submit">Upload</button>
     </form>
     <div class="progress-wrapper">
-        <progress id="progress" value="0" max="100" style="width:100%; display:none;"></progress>
+        <progress id="progress" value="0" max="100" style="width:100%;"></progress>
     </div>
 
     <script>
@@ -22,6 +33,7 @@
     const form = document.getElementById('uploadForm');
     const fileInput = document.getElementById('file');
     const progress = document.getElementById('progress');
+    const folderSelect = document.getElementById('folder');
     const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB per chunk
 
     form.addEventListener('submit', async function(e) {
@@ -30,6 +42,7 @@
         let totalBytes = 0;
         let uploadedBytes = 0;
         for (let f of files) totalBytes += f.size;
+        const folder = folderSelect.value;
 
         for (const file of files) {
             const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
@@ -42,6 +55,7 @@
                 formData.append('chunkIndex', chunkIndex);
                 formData.append('totalChunks', totalChunks);
                 formData.append('fileName', file.name);
+                formData.append('folder', folder);
 
                 await new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
@@ -66,6 +80,17 @@
         }
         window.location.href = '{{ url_for("list_videos") }}';
     });
+
+    function crearCarpeta() {
+        const folder = document.getElementById('new_folder').value;
+        if (folder) {
+            fetch('{{ url_for("create_folder") }}', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'new_folder=' + encodeURIComponent(folder)
+            }).then(()=>window.location.reload());
+        }
+    }
     </script>
 </body>
 </html>

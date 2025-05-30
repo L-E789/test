@@ -1,0 +1,95 @@
+/* CSS rules specific to upload.html */
+
+.upload-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 2rem;
+    background: var(--bg-card, #fff);
+    border-radius: var(--radius, 8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.upload-container h1 {
+    color: var(--primary, #4a90e2);
+    margin-bottom: 1.5rem;
+    font-size: 1.8em;
+}
+
+/* Styling for the form itself if it's directly under .upload-container */
+.upload-container form {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+.upload-container label {
+    font-weight: 500;
+    color: #444;
+}
+
+.upload-container select,
+.upload-container input[type="text"],
+.upload-container input[type="file"] {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius, 8px);
+    box-sizing: border-box;
+}
+
+.upload-container input[type="file"].form-input-file {
+    padding: 0.5rem; /* Specific padding for file input if needed */
+}
+
+.upload-container button[type="submit"],
+.upload-container button[type="button"] {
+    display: inline-block;
+    width: auto; /* Override generic button full width */
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary, #4a90e2);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius, 8px);
+    cursor: pointer;
+    transition: background-color var(--transition, 0.3s ease);
+    margin-right: 0.5rem; /* Space between buttons if they are inline */
+}
+
+.upload-container button[type="submit"]:hover,
+.upload-container button[type="button"]:hover {
+    background-color: #3a7bd5;
+}
+
+.upload-container #new_folder {
+    margin-left: 0.5rem; /* Align with select or provide distinct spacing */
+}
+
+.progress-wrapper {
+    margin-top: 1.5rem;
+}
+
+#progress {
+    width: 100%;
+    height: 12px; /* Make progress bar a bit thicker */
+    border-radius: 6px;
+    display: none; /* Initially hidden, shown by JS */
+}
+
+#progress::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 6px;
+}
+
+#progress::-webkit-progress-value {
+    background-color: var(--secondary, #50e3c2);
+    border-radius: 6px;
+    transition: width 0.2s ease-out;
+}
+
+#progress::-moz-progress-bar {
+    background-color: var(--secondary, #50e3c2);
+    border-radius: 6px;
+    transition: width 0.2s ease-out;
+}
