@@ -40,7 +40,11 @@
             <td data-label="Tamaño">{{ v.size }}</td>
             <td data-label="Duración">{{ v.duration }}</td>
             <td data-label="Acción">
-              <a href="{{ url_for('view_video', filename=v.rel) }}" class="btn-small">▶️ Ver</a>
+              {% if v.duration == 'procesando video' %}
+                <span style="color: orange; font-weight: bold;">Realizando conversión a mp4...</span>
+              {% elif v.name.lower().endswith('.mp4') %}
+                <a href="{{ url_for('view_video', filename=v.rel) }}" class="btn-small">▶️ Ver</a>
+              {% endif %}
               <a href="{{ url_for('download_file', filename=v.rel) }}" class="btn-small">⬇️ Descargar</a>
             </td>
           </tr>

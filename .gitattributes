@@ -1,0 +1,7 @@
+ffmpeg-linux/bin/ffplay filter=lfs diff=lfs merge=lfs -text
+ffmpeg-win/bin/avcodec-62.dll filter=lfs diff=lfs merge=lfs -text
+ffmpeg-win/bin/ffmpeg.exe filter=lfs diff=lfs merge=lfs -text
+ffmpeg-win/bin/ffprobe.exe filter=lfs diff=lfs merge=lfs -text
+ffmpeg-win/bin/ffplay.exe filter=lfs diff=lfs merge=lfs -text
+ffmpeg-linux/bin/ffprobe filter=lfs diff=lfs merge=lfs -text
+ffmpeg-linux/bin/ffmpeg filter=lfs diff=lfs merge=lfs -text
