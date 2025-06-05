@@ -1,0 +1,53 @@
+/* CSS rules specific to view.html */
+
+.view-page-container {
+    padding: 20px;
+    background-color: var(--bg-page, #f5f7fa);
+    min-height: calc(100vh - 40px); /* Full height minus padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.view-page-container h1 {
+    color: var(--primary, #4a90e2);
+    margin-bottom: 1.5rem;
+}
+
+.video-container {
+    display: flex;
+    flex-direction: column; /* Stack video and title */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px; /* Max width for the video player area */
+    margin: 0 auto; /* Center it */
+}
+
+.video-container video {
+    width: 100%; /* Make video responsive */
+    height: auto;
+    border-radius: var(--radius, 8px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    background-color: #000; /* Black background for letterboxing */
+}
+
+.video-title {
+    font-size: 1.5em;
+    color: var(--text-default, #333);
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Using .btn from global styles.css, but can add specific view-btn if needed */
+.button-container .btn {
+    padding: 10px 25px;
+    font-size: 1.1em;
+}

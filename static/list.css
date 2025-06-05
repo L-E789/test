@@ -1,0 +1,100 @@
+/* CSS rules specific to list.html */
+
+.list-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 1rem;
+}
+
+/* Public video table styles */
+.video-table {
+  width: 100%;
+  border-collapse: separate; /* Ensure this is separate for unique styling */
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  /* margin-bottom: 1.5em; /* Optional: if you want space below the table */
+}
+
+.video-table th,
+.video-table td {
+  padding: 0.75rem 1rem; /* Adjusted padding */
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.video-table th {
+    background: linear-gradient(135deg, #5b86e5, #36d1dc);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+}
+
+.video-table td {
+    background: #fafafa;
+}
+
+.video-table tr:nth-child(even) td {
+    background: #f0f8ff;
+}
+
+.video-table tr:hover td {
+    background: #e6f7ff;
+    /* transform: scale(1.01); /* Optional: subtle hover effect */
+    /* transition: transform 0.2s, background 0.2s; */
+}
+
+.video-table a {
+    color: var(--primary, #4a90e2);
+    font-weight: 500;
+}
+.video-table a:hover {
+    text-decoration: underline;
+    color: var(--secondary, #50e3c2);
+}
+
+/* Responsive styles for public video-table */
+@media (max-width: 600px) {
+  .video-table thead {
+    display: none;
+  }
+  .video-table,
+  .video-table tbody,
+  .video-table tr,
+  .video-table td {
+    display: block;
+    width: 100%;
+  }
+  .video-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: var(--radius, 8px);
+    overflow: hidden;
+  }
+  .video-table td {
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    border-bottom: 1px dashed #eee;
+  }
+  .video-table td:last-child {
+    border-bottom: none;
+  }
+  .video-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%; /* Adjusted width */
+    padding-left: 1rem;
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap;
+  }
+}

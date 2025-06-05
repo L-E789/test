@@ -1,0 +1,381 @@
+/* CSS rules specific to admin.html */
+
+/* Admin wrapper y tarjeta */
+.admin-container {
+  display: flex;
+  justify-content: center;
+  background: var(--bg-page);
+  padding: 40px 0;
+}
+.admin-card {
+  background: var(--bg-card);
+  width: 90%;
+  max-width: 1000px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform var(--transition);
+}
+.admin-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Cabecera dentro de la tarjeta */
+.admin-header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-light);
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.admin-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left; /* Ensure it overrides general h1 if any */
+  color: var(--text-light); /* Ensure it overrides general h1 if any */
+}
+
+/* Botón subir específico para admin */
+.admin-header .btn-upload {
+  background: var(--secondary);
+  color: var(--text-light);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+}
+.admin-header .btn-upload:hover {
+  background: var(--primary);
+  transform: scale(1.05);
+}
+
+/* Formulario de búsqueda específico para admin */
+.search-form {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 30px;
+  gap: 10px;
+  max-width: none; /* Override generic form */
+  margin: 0; /* Override generic form */
+  background-color: transparent; /* Override generic form */
+  box-shadow: none; /* Override generic form */
+}
+.search-form input {
+  width: 250px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  transition: border var(--transition);
+}
+.search-form input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* Admin panel table - Consolidated and latest styles */
+.admin-table {
+  width: 100%;
+  min-width: 500px; /* Ensure table has a minimum width */
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden; /* For border-radius to apply to children */
+  box-shadow: 0 4px 16px rgba(44,91,227,0.05);
+  background: #fff; /* Explicit background for the table */
+  margin: 0 auto 30px; /* Centering and bottom margin */
+  table-layout: fixed; /* For ellipsis to work well */
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e3eafc;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-table th {
+  background: #e3eafc;
+  color: #2d5be3;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table td {
+  background: #fff; /* Ensure td background is white */
+}
+
+.admin-table tbody tr:hover td { /* Hover effect for rows */
+  background: var(--bg-page, #f5f7fa); /* Use variable or fallback */
+}
+
+.admin-table tbody td:first-child {
+  font-weight: 500; /* If you want the first column (e.g., checkbox or name) to be bold */
+}
+
+.admin-table .inline-form {
+    display: flex;
+    gap: 5px;
+    justify-content: center; /* Center buttons in rename/delete cells */
+    align-items: center;
+    background-color: transparent; /* Override generic form */
+    box-shadow: none; /* Override generic form */
+    margin: 0; /* Override generic form */
+    padding: 0; /* Override generic form */
+    max-width: none; /* Override generic form */
+}
+
+
+/* Folder navigation */
+.folder-nav {
+  background: #f7faff;
+  border-radius: 8px;
+  padding: 1em;
+  margin-bottom: 1.5em;
+  box-shadow: 0 2px 8px rgba(44,91,227,0.04);
+}
+.folder-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.folder-nav li {
+  margin: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.folder-nav li a {
+  display: flex;
+  align-items: center;
+  gap: 0.5em; /* This creates space between icon and text */
+  text-decoration: none;
+  font-weight: 500;
+  color: #2d5be3;
+  background: #e3eafc;
+  padding: 6px 12px; /* Adjusted padding slightly */
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  /* position: relative; /* This was inline, ensure it's not needed or handled by li */
+}
+.folder-nav li a:hover {
+  background: #d0dbfa;
+  color: #1a3a7c;
+  text-decoration: none; /* Override generic a:hover */
+}
+.folder-nav .btn-small { /* Style for "Up to parent" button if it's inside folder-nav */
+    margin-bottom: 8px;
+    background: #e3eafc;
+    color: #2d5be3;
+}
+.folder-nav .btn-small:hover {
+    background: #d0dbfa;
+    color: #1a3a7c;
+}
+
+/* Custom Context Menu for Folders */
+.custom-context-menu {
+  position: absolute;
+  display: none; /* Hidden by default */
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 1000; /* Ensure it\'s on top */
+  border-radius: 5px;
+  padding: 5px 0;
+  min-width: 180px; /* Adjust as needed */
+}
+
+.custom-context-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.custom-context-menu ul li {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.custom-context-menu ul li:hover {
+  background-color: var(--primary-light, #e3eafc);
+  color: var(--primary, #2d5be3);
+}
+
+/* Modal de renombrar - Moved from styles.css */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+}
+.modal-content {
+    background: #fff;
+    /* margin: 10% auto; /* Replaced by flex centering */
+    padding: 24px 20px 20px 20px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 360px; /* Max width for modal */
+    box-shadow: 0 8px 24px rgba(44,91,227,0.12);
+    position: relative;
+}
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #2d5be3;
+    font-size: 1.5em; /* Adjusted size */
+}
+.modal-content .close {
+    position: absolute;
+    right: 15px; /* Adjusted */
+    top: 10px;  /* Adjusted */
+    font-size: 1.8rem; /* Larger close button */
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    color: #888;
+}
+.modal-content .close:hover {
+    color: #e94e77;
+}
+
+/* Form group and input inside modal */
+.modal .form-group {
+    margin-bottom: 1rem;
+}
+.modal .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+.modal .form-group input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius, 8px);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.modal .form-group input[type="text"]:focus {
+    border-color: var(--primary, #4a90e2);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    outline: none;
+}
+
+/* Button inside modal */
+.modal-content .btn, .modal-content .btn-small {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem; /* Consistent padding */
+}
+
+/* Paginación - Moved from styles.css */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0; /* More vertical padding */
+    gap: 10px; /* Increased gap */
+}
+.pagination .btn-small {
+    background: var(--primary-light, #e3eafc); /* Lighter background */
+    color: var(--primary, #2d5be3);
+    padding: 8px 14px; /* Adjusted padding */
+    font-weight: 500;
+}
+.pagination .btn-small:hover {
+    background: var(--primary-dark, #d0dbfa);
+    color: var(--primary-hover, #1a3a7c);
+}
+.pagination span {
+    color: #555;
+    font-size: 0.95em;
+}
+
+/* Icon buttons - Moved from styles.css */
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.3rem; /* Slightly larger */
+    cursor: pointer;
+    padding: 5px; /* Add some padding for easier clicking */
+    color: #555; /* Default color */
+    transition: transform .2s, color .2s;
+}
+.btn-icon:hover { 
+    transform: scale(1.2); 
+    color: var(--primary, #4a90e2);
+}
+
+/* Specific icon button variants if needed, e.g., for delete */
+.btn-icon.btn-danger {
+    color: #e94e77; /* Danger color for icon */
+}
+.btn-icon.btn-danger:hover {
+    color: #c82333; /* Darker danger color on hover */
+}
+
+/* Responsive admin */
+@media (max-width: 700px) {
+  .admin-card {
+    width: 100%;
+    min-width: unset;
+    margin: 0;
+    border-radius: 0;
+    padding: 0;
+  }
+  .admin-header {
+    padding: 15px;
+  }
+  .admin-header h1 {
+    font-size: 1.5rem;
+  }
+  .search-form {
+    padding: 15px;
+    justify-content: stretch;
+  }
+  .search-form input {
+    width: 100%;
+    flex-grow: 1;
+  }
+  .admin-table {
+    min-width: 100%; /* Full width on small screens */
+    font-size: 0.90em; /* Slightly smaller font */
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 6px; /* Reduce padding */
+  }
+  .folder-nav {
+    border-radius: 0;
+    margin-bottom: 1em;
+  }
+  .folder-nav ul {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+  .folder-nav li a {
+    padding: 8px 12px;
+  }
+}

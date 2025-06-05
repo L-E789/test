@@ -5,10 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Videos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='list.css') }}">
 </head>
 <body>
   <div class="list-container">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 1em;">
+      <a href="{{ url_for('admin_panel') }}" style="text-decoration: underline; color: #007bff; font-size: 1em; background: none; border: none; padding: 0; cursor: pointer;">Ir al panel de administración</a>
+    </div>
     <h1>Uploaded Videos</h1>
+    <div>
+      {% if parent is not none %}
+        <a href="{{ url_for('list_videos', folder=parent) }}">⬅️ Subir a carpeta anterior</a>
+      {% endif %}
+      <ul>
+        {% for d in dirs %}
+          <li>📁 <a href="{{ url_for('list_videos', folder=d.rel) }}">{{ d.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
     <div class="table-wrapper">
       <table class="video-table">
         <thead>
@@ -20,14 +34,14 @@
           </tr>
         </thead>
         <tbody>
-        {% for v in videos %}
+        {% for v in files %}
           <tr>
             <td data-label="Nombre">{{ v.name }}</td>
             <td data-label="Tamaño">{{ v.size }}</td>
             <td data-label="Duración">{{ v.duration }}</td>
             <td data-label="Acción">
-              <a href="{{ url_for('view_video', filename=v.name) }}" class="btn-small">▶️ Ver</a>
-              <a href="{{ url_for('download_file', filename=v.name) }}" class="btn-small">⬇️ Descargar</a>
+              <a href="{{ url_for('view_video', filename=v.rel) }}" class="btn-small">▶️ Ver</a>
+              <a href="{{ url_for('download_file', filename=v.rel) }}" class="btn-small">⬇️ Descargar</a>
             </td>
           </tr>
         {% endfor %}

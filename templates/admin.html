@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Panel Administrativo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
 </head>
 <body>
     <div class="admin-container">
@@ -13,50 +14,89 @@
             <a href="{{ url_for('upload_file') }}" class="btn btn-upload">Subir Video</a>
         </div>
         <!-- Búsqueda -->
-        <form method="get" action="{{ url_for('admin_panel') }}" class="search-form">
-            <input type="text" name="search" placeholder="Buscar..." value="{{ search }}">
+        <form method="get" action="{{ url_for('admin_panel', folder=folder) }}" class="search-form">
+            <input type="text" name="search" placeholder="Buscar en esta carpeta..." value="{{ search }}">
             <button type="submit" class="btn-small">🔍</button>
         </form>
 
-        <!-- Tabla con iconos -->
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Video</th>
-                    <th>Renombrar</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for v in videos %}
-                <tr>
-                    <td>{{ v }}</td>
-                    <td>
-                      <button class="btn-icon rename-btn" data-filename="{{ v }}" title="Renombrar">
-                        ✏️
-                      </button>
-                    </td>
-                    <td>
-                      <form action="{{ url_for('admin_delete') }}" method="post" class="inline-form">
-                        <input type="hidden" name="del_name" value="{{ v }}">
-                        <button type="submit" class="btn-icon btn-danger" title="Eliminar">
-                          🗑️
-                        </button>
-                      </form>
-                    </td>
-                </tr>
+        <!-- Navegación de carpetas -->
+        <div class="folder-nav" style="margin-bottom:1.5em; background:#f7faff; border-radius:8px; padding:1em;">
+          {% if parent is not none %}
+            <a href="{{ url_for('admin_panel', folder=parent) }}" class="btn-small" style="margin-bottom:8px; background:#e3eafc;">⬅️ Subir a carpeta anterior</a>
+          {% endif %}
+          <ul style="margin:0; padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:1em;">
+            {% for d in dirs %}
+              <li>
+                <a href="{{ url_for('admin_panel', folder=d.rel) }}" class="folder-link" data-folder-rel="{{ d.rel }}" data-folder-name="{{ d.name }}">
+                  <span class="folder-icon">📁</span> <span>{{ d.name }}</span>
+                </a>
+              </li>
             {% endfor %}
-            </tbody>
-        </table>
+          </ul>
+        </div>
+
+        {# Custom Context Menu - Initially Hidden #}
+        <div id="folderContextMenu" class="custom-context-menu">
+            <ul>
+                <li id="contextMenuDeleteFolder">Eliminar Carpeta</li>
+            </ul>
+        </div>
+
+        <!-- Tabla con iconos y checkboxes para borrado múltiple -->
+        <form method="post" action="{{ url_for('admin_delete_multi') }}">
+          <input type="hidden" name="folder" value="{{ folder }}">
+          <div class="table-wrapper" style="overflow-x:auto;">
+          <table class="admin-table" style="min-width:500px;">
+              <thead>
+                  <tr style="background:#e3eafc;">
+                      <th style="width:40px;"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                      <th>Archivo</th>
+                      <th style="width:110px;">Renombrar</th>
+                      <th style="width:110px;">Eliminar</th>
+                  </tr>
+              </thead>
+              <tbody>
+              {% if files|length == 0 %}
+                <tr><td colspan="4" style="text-align:center;color:#888;">No hay archivos en esta carpeta</td></tr>
+              {% endif %}
+              {% for v in files %}
+                  <tr style="background:#fff; border-bottom:1px solid #e3eafc;">
+                      <td style="text-align:center;"><input type="checkbox" name="files" value="{{ v.rel }}"></td>
+                      <td style="text-align:left;">
+                        <span style="font-size:1.1em;">🎬</span> <span style="font-weight:500;">{{ v.name }}</span>
+                      </td>
+                      <td style="text-align:center;">
+                        <button class="btn-icon rename-btn" data-filename="{{ v.rel }}" title="Renombrar" type="button">
+                          ✏️
+                        </button>
+                      </td>
+                      <td style="text-align:center;">
+                        <form action="{{ url_for('admin_delete') }}" method="post" class="inline-form">
+                          <input type="hidden" name="del_name" value="{{ v.rel }}">
+                          <button type="submit" class="btn-icon btn-danger" title="Eliminar">
+                            🗑️
+                          </button>
+                        </form>
+                      </td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+          </div>
+          <div style="margin:1em 0; display:flex; gap:1em; flex-wrap:wrap;">
+            <button type="submit" class="btn-small btn-danger">Borrar seleccionados</button>
+            <button type="submit" name="delete_all" value="1" class="btn-small btn-danger" onclick="return confirm('¿Seguro que deseas borrar TODOS los archivos de esta carpeta?')">Borrar todos</button>
+          </div>
+        </form>
 
         <!-- Paginación -->
         <div class="pagination">
             {% if page > 1 %}
-                <a href="{{ url_for('admin_panel', page=page-1, search=search) }}" class="btn-small">&laquo; Prev</a>
+                <a href="{{ url_for('admin_panel', folder=folder, page=page-1, search=search) }}" class="btn-small">&laquo; Prev</a>
             {% endif %}
             Página {{ page }} de {{ total_pages }}
             {% if page < total_pages %}
-                <a href="{{ url_for('admin_panel', page=page+1, search=search) }}" class="btn-small">Next &raquo;</a>
+                <a href="{{ url_for('admin_panel', folder=folder, page=page+1, search=search) }}" class="btn-small">Next &raquo;</a>
             {% endif %}
         </div>
 
@@ -96,6 +136,78 @@
       });
       document.querySelector('.modal .close').onclick = ()=> modal.style.display='none';
       window.onclick = e=> { if(e.target==modal) modal.style.display='none'; }
+      // Checkbox select all
+      function toggleAll(source) {
+        document.querySelectorAll('input[type="checkbox"][name="files"]').forEach(cb=>cb.checked=source.checked);
+      }
+
+      // Custom Context Menu for Folders
+      const contextMenu = document.getElementById('folderContextMenu');
+      const contextMenuDeleteFolder = document.getElementById('contextMenuDeleteFolder');
+      let currentFolderRel = null;
+      let currentFolderName = null;
+
+      document.querySelectorAll('.folder-link').forEach(folderLink => {
+        folderLink.addEventListener('contextmenu', function(event) {
+          event.preventDefault(); // Prevent default context menu
+
+          currentFolderRel = event.currentTarget.dataset.folderRel;
+          currentFolderName = event.currentTarget.dataset.folderName;
+          
+          const rect = event.currentTarget.getBoundingClientRect();
+
+          // Ensure the context menu is a child of document.body for correct positioning
+          if (contextMenu.parentNode !== document.body) {
+            document.body.appendChild(contextMenu);
+          }
+
+          contextMenu.style.top = `${rect.bottom + window.scrollY}px`;
+          contextMenu.style.left = `${rect.left + window.scrollX}px`;
+          contextMenu.style.display = 'block';
+        });
+      });
+
+      contextMenuDeleteFolder.addEventListener('click', function() {
+        contextMenu.style.display = 'none'; // Hide context menu
+        if (currentFolderRel && currentFolderName) {
+          if (confirm(`¿Seguro que deseas borrar la carpeta "${currentFolderName}" y todo su contenido?`)) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ url_for("admin_delete_folder") }}';
+
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'folder_name';
+            hiddenInput.value = currentFolderRel;
+            form.appendChild(hiddenInput);
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form); // Clean up
+          }
+          // Reset current folder info
+          currentFolderRel = null;
+          currentFolderName = null;
+        }
+      });
+
+      // Hide context menu on any other click
+      window.addEventListener('click', function(event) {
+        if (event.target !== contextMenu && !contextMenu.contains(event.target)) {
+          contextMenu.style.display = 'none';
+          currentFolderRel = null;
+          currentFolderName = null;
+        }
+      });
+
+      // Optional: Hide on Escape key
+      window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+          contextMenu.style.display = 'none';
+          currentFolderRel = null;
+          currentFolderName = null;
+        }
+      });
     </script>
 </body>
 </html>
